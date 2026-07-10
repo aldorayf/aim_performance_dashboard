@@ -43,7 +43,7 @@ Papa.parse(otrCsvContent, {
 console.log(`Found ${otrLoadIds.size} OTR loads in reference CSV`);
 
 // Read Profitability CSV
-const profitCsvPath = path.join(__dirname, '../public/2026-07-10T16_38_57.419Z-profitability.csv');
+const profitCsvPath = path.join(__dirname, '../public/2026-07-10T17_23_49.573Z-profitability.csv');
 const profitCsvContent = fs.readFileSync(profitCsvPath, 'utf-8');
 
 const otrRecords = [];
@@ -101,4 +101,5 @@ fs.writeFileSync(outputPath, csv, 'utf-8');
 
 console.log(`âœ… Created OTR loads CSV at: ${outputPath}`);
 console.log(`   Total OTR loads exported: ${otrRecords.length}`);
+
 

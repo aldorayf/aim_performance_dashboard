@@ -59,7 +59,7 @@ export default function ManagerDashboard() {
         setLoading(true);
 
         const [profitabilityResponse, otrResponse] = await Promise.all([
-          fetch('/2026-07-10T16_38_57.419Z-profitability.csv'),
+          fetch('/2026-07-10T17_23_49.573Z-profitability.csv'),
           fetch('/AIM TRUCK OTR  - COMPLETED RUNS.csv'),
         ]);
 
