@@ -121,6 +121,9 @@ const FILE_QUARTER_MAP: Record<string, { year: number; quarter: string }> = {
   '14': { year: 2025, quarter: 'Q1' },
   '15': { year: 2025, quarter: 'Q2' },
   '16': { year: 2025, quarter: 'Q3' },
+  '17': { year: 2025, quarter: 'Q4' },
+  '18': { year: 2026, quarter: 'Q1' },
+  '19': { year: 2026, quarter: 'Q2' },
 };
 
 const PL_FILES = [
@@ -135,6 +138,9 @@ const PL_FILES = [
   'Aim Trucking Services, Inc._Profit and Loss (14).csv', // Q1 2025
   'Aim Trucking Services, Inc._Profit and Loss (15).csv', // Q2 2025
   'Aim Trucking Services, Inc._Profit and Loss (16).csv', // Q3 2025
+  'Aim Trucking Services, Inc._Profit and Loss (17).csv', // Q4 2025
+  'Aim Trucking Services, Inc._Profit and Loss (18).csv', // Q1 2026
+  'Aim Trucking Services, Inc._Profit and Loss (19).csv', // Q2 2026
 ];
 
 function parseAmount(value: string): number {

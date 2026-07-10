@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 const path = require('path');
 const Papa = require('papaparse');
 
@@ -10,7 +10,7 @@ function extractLoadId(loadNumber) {
 console.log('Finding OTR loads not in profitability report...\n');
 
 // Read Profitability CSV to get all load IDs
-const profitCsvPath = path.join(__dirname, '../public/2025-10-28T12_02_21.626Z-profitability.csv');
+const profitCsvPath = path.join(__dirname, '../public/2026-07-10T16_38_57.419Z-profitability.csv');
 const profitCsvContent = fs.readFileSync(profitCsvPath, 'utf-8');
 
 const profitabilityLoadIds = new Set();
@@ -96,7 +96,7 @@ const csv = Papa.unparse(unmatchedOTRLoads);
 const outputPath = path.join(__dirname, '../public/OTR-Loads-Not-In-Profitability.csv');
 fs.writeFileSync(outputPath, csv, 'utf-8');
 
-console.log(`✅ Created unmatched OTR loads CSV at: ${outputPath}`);
+console.log(`âœ… Created unmatched OTR loads CSV at: ${outputPath}`);
 console.log(`   Total unmatched loads: ${unmatchedOTRLoads.length}`);
 
 // Show first few examples
@@ -110,3 +110,4 @@ if (unmatchedOTRLoads.length > 0) {
     console.log(`  ... and ${unmatchedOTRLoads.length - 10} more`);
   }
 }
+

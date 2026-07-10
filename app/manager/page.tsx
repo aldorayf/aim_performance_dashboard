@@ -34,6 +34,11 @@ const DATE_RANGES: DateRange[] = [
     startDate: new Date(2024, 9, 1),
     endDate: new Date(2025, 8, 30),
   },
+  {
+    label: '2025 Q4 - 2026 Q2 (Oct 2025 - Jun 2026)',
+    startDate: new Date(2025, 9, 1),
+    endDate: new Date(2026, 5, 30),
+  },
 ];
 
 export default function ManagerDashboard() {
@@ -45,7 +50,7 @@ export default function ManagerDashboard() {
   const [quarterlyComparison, setQuarterlyComparison] = useState<QuarterlyComparisonMetric[]>([]);
   const [monthlyRevenueComparison, setMonthlyRevenueComparison] = useState<MonthlyRevenueComparison[]>([]);
   const [plSummary, setPlSummary] = useState<any>(null);
-  const [selectedDateRangeIndex, setSelectedDateRangeIndex] = useState(2);
+  const [selectedDateRangeIndex, setSelectedDateRangeIndex] = useState(3);
 
   // Load initial data once
   useEffect(() => {
@@ -54,7 +59,7 @@ export default function ManagerDashboard() {
         setLoading(true);
 
         const [profitabilityResponse, otrResponse] = await Promise.all([
-          fetch('/2025-10-28T12_02_21.626Z-profitability.csv'),
+          fetch('/2026-07-10T16_38_57.419Z-profitability.csv'),
           fetch('/AIM TRUCK OTR  - COMPLETED RUNS.csv'),
         ]);
 

@@ -74,12 +74,15 @@ export async function parseProfitabilityData(
           if (!loadNumber) return;
 
           const loadId = extractLoadId(loadNumber);
-          const isOTR = otrLoadIds.has(loadId);
 
           let chargesType = row['Charges Type']
             ?.split(',')
             .map((c: string) => c.trim())
             .filter((c: string) => c) || [];
+
+          // A load is OTR if it's in the OTR runs sheet, or if the export
+          // already labels it with an OTR LINEHAUL charge (newer exports)
+          const isOTR = otrLoadIds.has(loadId) || chargesType.includes('OTR LINEHAUL');
 
           // If this is an OTR load, replace "Base Price" with "OTR LINEHAUL"
           if (isOTR) {

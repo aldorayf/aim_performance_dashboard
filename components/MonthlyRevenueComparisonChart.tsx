@@ -22,6 +22,7 @@ const COLORS: Record<string, { otr: string; local: string }> = {
   '2023': { otr: '#3b82f6', local: '#93c5fd' }, // Blue shades
   '2024': { otr: '#10b981', local: '#6ee7b7' }, // Green shades
   '2025': { otr: '#f59e0b', local: '#fcd34d' }, // Orange/Yellow shades
+  '2026': { otr: '#a855f7', local: '#d8b4fe' }, // Purple shades
 };
 
 export default function MonthlyRevenueComparisonChart({ data }: MonthlyRevenueComparisonChartProps) {

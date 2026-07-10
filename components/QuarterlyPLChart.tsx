@@ -22,6 +22,7 @@ const YEAR_COLORS: Record<string, { revenue: string; expenses: string }> = {
   '2023': { revenue: '#3b82f6', expenses: '#93c5fd' }, // Blue shades
   '2024': { revenue: '#10b981', expenses: '#6ee7b7' }, // Green shades
   '2025': { revenue: '#f59e0b', expenses: '#fcd34d' }, // Orange/Yellow shades
+  '2026': { revenue: '#a855f7', expenses: '#d8b4fe' }, // Purple shades
 };
 
 export default function QuarterlyPLChart({ data }: QuarterlyPLChartProps) {
