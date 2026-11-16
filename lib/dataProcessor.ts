@@ -99,7 +99,9 @@ export async function parseProfitabilityData(
           const dateStr = row['Date']?.trim() || '';
           let dateObj = new Date();
           try {
-            dateObj = parse(dateStr, 'M/d/yyyy', new Date());
+            // PortPro exports may use either two- or four-digit years.
+            const dateFormat = /^\d{1,2}\/\d{1,2}\/\d{2}$/.test(dateStr) ? 'M/d/yy' : 'M/d/yyyy';
+            dateObj = parse(dateStr, dateFormat, new Date());
           } catch (e) {
             console.error('Error parsing date:', dateStr, e);
           }

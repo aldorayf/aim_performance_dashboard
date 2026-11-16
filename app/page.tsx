@@ -35,9 +35,9 @@ const DATE_RANGES: DateRange[] = [
     endDate: new Date(2025, 8, 30), // Sep 30, 2025
   },
   {
-    label: '2025 Q4 - 2026 Q2 (Oct 2025 - Jun 2026)',
+    label: '2025 Q4 - 2026 Q3 (Oct 2025 - Sep 2026)',
     startDate: new Date(2025, 9, 1), // Oct 1, 2025
-    endDate: new Date(2026, 5, 30), // Jun 30, 2026
+    endDate: new Date(2026, 8, 30), // Sep 30, 2026
   },
 ];
 
@@ -50,7 +50,7 @@ export default function Dashboard() {
   const [quarterlyComparison, setQuarterlyComparison] = useState<QuarterlyComparisonMetric[]>([]);
   const [monthlyRevenueComparison, setMonthlyRevenueComparison] = useState<MonthlyRevenueComparison[]>([]);
   const [plSummary, setPlSummary] = useState<any>(null);
-  const [selectedDateRangeIndex, setSelectedDateRangeIndex] = useState(3); // Default to 2025 Q4 - 2026 Q2
+  const [selectedDateRangeIndex, setSelectedDateRangeIndex] = useState(3); // Default to 2025 Q4 - 2026 Q3
 
   // Load initial data once
   useEffect(() => {
@@ -59,21 +59,27 @@ export default function Dashboard() {
         setLoading(true);
 
         // Load CSV files
-        const [profitabilityResponse, otrResponse] = await Promise.all([
+        const [profitabilityResponse, q3Response, otrResponse] = await Promise.all([
           fetch('/2026-07-10T17_23_49.573Z-profitability.csv'),
+          fetch('/2026-11-16T13_40_05.019Z-profitability.csv'),
           fetch('/AIM TRUCK OTR  - COMPLETED RUNS.csv'),
         ]);
 
-        if (!profitabilityResponse.ok || !otrResponse.ok) {
+        if (!profitabilityResponse.ok || !q3Response.ok || !otrResponse.ok) {
           throw new Error('Failed to load data files');
         }
 
         const profitabilityText = await profitabilityResponse.text();
+        const q3Text = await q3Response.text();
         const otrText = await otrResponse.text();
 
         // Parse data
         const otrLoadIds = await parseOTRData(otrText);
-        const records = await parseProfitabilityData(profitabilityText, otrLoadIds);
+        const [historicalRecords, q3Records] = await Promise.all([
+          parseProfitabilityData(profitabilityText, otrLoadIds),
+          parseProfitabilityData(q3Text, otrLoadIds),
+        ]);
+        const records = [...historicalRecords, ...q3Records];
 
         // Store all records
         setAllRecords(records);

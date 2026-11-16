@@ -124,6 +124,7 @@ const FILE_QUARTER_MAP: Record<string, { year: number; quarter: string }> = {
   '17': { year: 2025, quarter: 'Q4' },
   '18': { year: 2026, quarter: 'Q1' },
   '19': { year: 2026, quarter: 'Q2' },
+  '20': { year: 2026, quarter: 'Q3' },
 };
 
 const PL_FILES = [
@@ -141,6 +142,7 @@ const PL_FILES = [
   'Aim Trucking Services, Inc._Profit and Loss (17).csv', // Q4 2025
   'Aim Trucking Services, Inc._Profit and Loss (18).csv', // Q1 2026
   'Aim Trucking Services, Inc._Profit and Loss (19).csv', // Q2 2026
+  'Aim Trucking Services, Inc._Profit and Loss (20).csv', // Q3 2026
 ];
 
 function parseAmount(value: string): number {
@@ -245,12 +247,12 @@ async function parsePLFile(csvText: string, filename: string): Promise<Quarterly
             inExpenseSection = true;
             continue;
           }
-          if (label.startsWith('Total for Income')) {
+          if (label === 'Total Income' || label.startsWith('Total for Income')) {
             plData.totalIncome = parseAmount(value);
             inIncomeSection = false;
             continue;
           }
-          if (label.startsWith('Total for Expenses')) {
+          if (label === 'Total Expenses' || label.startsWith('Total for Expenses')) {
             plData.totalExpenses = parseAmount(value);
             inExpenseSection = false;
             continue;
@@ -338,9 +340,9 @@ async function parsePLFile(csvText: string, filename: string): Promise<Quarterly
             } else if (label === 'Utilities') {
               plData.expenses.utilities += amount;
               plData.utilities = amount;
-            } else if (label === 'Repairs and Maintenance') {
+            } else if (label === 'Repairs and Maintenance' || label === 'TIRES') {
               plData.expenses.repairsAndMaintenance += amount;
-              plData.repairsAndMaintenance = amount;
+              plData.repairsAndMaintenance += amount;
             } else if (label.startsWith('Total for Chassis Rental')) {
               // Use the total if available - REPLACE accumulated value
               plData.expenses.chassisRental = amount;
@@ -353,7 +355,7 @@ async function parsePLFile(csvText: string, filename: string): Promise<Quarterly
             // Administrative & Other
             else if (label === 'ACCOUNTING SERVICES EXPENSE') {
               plData.expenses.accountingServices += amount;
-            } else if (label === 'CPA Services' || label.startsWith('Total for Professional Fees')) {
+            } else if (label === 'Professional Fees' || label === 'CPA Services' || label.startsWith('Total for Professional Fees')) {
               plData.expenses.professionalFees += amount;
             } else if (label === 'Depreciation Expense') {
               plData.expenses.depreciation += amount;
@@ -422,28 +424,13 @@ export async function parsePLData(startDate?: Date, endDate?: Date): Promise<PLS
 
       // Filter by date range if provided
       if (startDate && endDate) {
-        // Parse the date range from the P&L quarter
-        const dateRange = plData.dateRange;
-        // Extract dates from format like "January 1-March 31, 2023"
-        const match = dateRange.match(/([A-Za-z]+)\s+(\d+)-([A-Za-z]+)\s+(\d+),\s+(\d+)/);
-        if (match) {
-          const startMonth = match[1];
-          const endMonth = match[3];
-          const year = parseInt(match[5]);
-
-          // Create quarter start and end dates
-          const monthMap: Record<string, number> = {
-            'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
-            'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
-          };
-
-          const quarterStart = new Date(year, monthMap[startMonth], 1);
-          const quarterEnd = new Date(year, monthMap[endMonth] + 1, 0); // Last day of month
-
-          // Check if quarter overlaps with selected date range
-          if (quarterEnd < startDate || quarterStart > endDate) {
-            continue; // Skip this quarter
-          }
+        // Use the registered quarter rather than the display heading, which
+        // varies between QuickBooks exports (e.g. "July-September, 2026").
+        const quarterIndex = Number(plData.quarter.slice(1)) - 1;
+        const quarterStart = new Date(plData.year, quarterIndex * 3, 1);
+        const quarterEnd = new Date(plData.year, quarterIndex * 3 + 3, 0);
+        if (quarterEnd < startDate || quarterStart > endDate) {
+          continue;
         }
       }
 
