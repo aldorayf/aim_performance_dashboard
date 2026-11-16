@@ -61,6 +61,8 @@ async function main() {
   money(q3PL.overallPL.expenseBreakdown.fuel, -11920.29);
   money(q3PL.overallPL.expenseBreakdown.repairsAndMaintenance, 320);
   money(Object.values(q3PL.overallPL.expenseBreakdown).reduce((a, b) => a + b, 0), 971884.28);
+  const startupPeriod = await pl.parsePLData(new Date(2024, 9, 1), new Date(2024, 11, 31));
+  money(startupPeriod.yardStorage.startupCosts, 603.22 / 3);
   for (const [start, end, expected] of [
     [new Date(2023, 0, 1), new Date(2023, 8, 30), 3],
     [new Date(2023, 9, 1), new Date(2024, 8, 30), 4],

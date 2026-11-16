@@ -342,7 +342,8 @@ async function parsePLFile(csvText: string, filename: string): Promise<Quarterly
               plData.utilities = amount;
             } else if (label === 'Repairs and Maintenance' || label === 'TIRES') {
               plData.expenses.repairsAndMaintenance += amount;
-              plData.repairsAndMaintenance += amount;
+              // Keep the existing yard startup-cost basis separate from tire repairs.
+              if (label === 'Repairs and Maintenance') plData.repairsAndMaintenance = amount;
             } else if (label.startsWith('Total for Chassis Rental')) {
               // Use the total if available - REPLACE accumulated value
               plData.expenses.chassisRental = amount;
